@@ -1,7 +1,7 @@
 # guzzle-cache-middleware
 
-[![Latest Stable Version](https://poser.pugx.org/kevinrob/guzzle-cache-middleware/v/stable)](https://packagist.org/packages/kevinrob/guzzle-cache-middleware) [![Total Downloads](https://poser.pugx.org/kevinrob/guzzle-cache-middleware/downloads)](https://packagist.org/packages/kevinrob/guzzle-cache-middleware) [![License](https://poser.pugx.org/kevinrob/guzzle-cache-middleware/license)](https://packagist.org/packages/kevinrob/guzzle-cache-middleware)  
-[![Build Status](https://travis-ci.org/Kevinrob/guzzle-cache-middleware.svg?branch=master)](https://travis-ci.org/Kevinrob/guzzle-cache-middleware) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Kevinrob/guzzle-cache-middleware/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Kevinrob/guzzle-cache-middleware/?branch=master) [![SensioLabsInsight](https://insight.sensiolabs.com/projects/077ec9d6-9362-43be-83c9-cf1db2c9c802/mini.png)](https://insight.sensiolabs.com/projects/077ec9d6-9362-43be-83c9-cf1db2c9c802) [![Code Coverage](https://scrutinizer-ci.com/g/Kevinrob/guzzle-cache-middleware/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/Kevinrob/guzzle-cache-middleware/?branch=master)  
+[![Latest Stable Version](https://poser.pugx.org/kevinrob/guzzle-cache-middleware/v/stable)](https://packagist.org/packages/kevinrob/guzzle-cache-middleware) [![Total Downloads](https://poser.pugx.org/kevinrob/guzzle-cache-middleware/downloads)](https://packagist.org/packages/kevinrob/guzzle-cache-middleware) [![License](https://poser.pugx.org/kevinrob/guzzle-cache-middleware/license)](https://packagist.org/packages/kevinrob/guzzle-cache-middleware)
+[![Build Status](https://travis-ci.org/Kevinrob/guzzle-cache-middleware.svg?branch=master)](https://travis-ci.org/Kevinrob/guzzle-cache-middleware) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Kevinrob/guzzle-cache-middleware/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Kevinrob/guzzle-cache-middleware/?branch=master) [![SensioLabsInsight](https://insight.sensiolabs.com/projects/077ec9d6-9362-43be-83c9-cf1db2c9c802/mini.png)](https://insight.sensiolabs.com/projects/077ec9d6-9362-43be-83c9-cf1db2c9c802) [![Code Coverage](https://scrutinizer-ci.com/g/Kevinrob/guzzle-cache-middleware/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/Kevinrob/guzzle-cache-middleware/?branch=master)
 
 
 A HTTP Cache for [Guzzle](https://github.com/guzzle/guzzle) 6. It's a simple Middleware to be added in the HandlerStack.
@@ -17,6 +17,7 @@ A HTTP Cache for [Guzzle](https://github.com/guzzle/guzzle) 6. It's a simple Mid
 - [Flysystem](https://github.com/thephpleague/flysystem)
 - [PSR6](https://github.com/php-fig/cache)
 - [WordPress Object Cache](https://codex.wordpress.org/Class_Reference/WP_Object_Cache)
+- [Yii2 cache](https://www.yiiframework.com/doc/guide/2.0/en/caching-data)
 
 ## Installation
 
@@ -63,7 +64,7 @@ $stack->push(
         new FilesystemCache('/tmp/')
       )
     )
-  ), 
+  ),
   'cache'
 );
 ```
@@ -128,7 +129,7 @@ $stack->push(
         new Local('/path/to/cache')
       )
     )
-  ), 
+  ),
   'cache'
 );
 ```
@@ -151,6 +152,24 @@ $stack->push(
 );
 ```
 
+## Yii2 Cache
+```php
+[...]
+use Kevinrob\GuzzleCache\Strategy\PrivateCacheStrategy;
+use Kevinrob\GuzzleCache\Storage\Yii2CacheStorage;
+
+[...]
+
+$stack->push(new CacheMiddleware(
+    new GreedyCacheStrategy(
+        new Yii2CacheStorage(
+            \Yii::$app->cache
+        ),
+        3600
+    )
+), 'cache');
+```
+
 ## Public and shared
 It's possible to add a public shared cache to the stack:
 ```php
@@ -170,7 +189,7 @@ $stack->push(
         new FilesystemCache('/tmp/')
       )
     )
-  ), 
+  ),
   'private-cache'
 );
 
@@ -184,7 +203,7 @@ $stack->push(
         )
       )
     )
-  ), 
+  ),
   'shared-cache'
 );
 ```
@@ -211,7 +230,7 @@ $stack->push(
       1800, // the TTL in seconds
       new KeyValueHttpHeader(['Authorization']) // Optional - specify the headers that can change the cache key
     )
-  ), 
+  ),
   'greedy-cache'
 );
 ```
